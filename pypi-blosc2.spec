@@ -7,17 +7,17 @@
 #
 Name     : pypi-blosc2
 Version  : 2.7.1
-Release  : 1
+Release  : 2
 URL      : https://files.pythonhosted.org/packages/ef/bb/19a5d672f86dd26be0fc4f3a4c04264c088f3309b7b9d4e3e853a1f3cfda/blosc2-2.7.1.tar.gz
 Source0  : https://files.pythonhosted.org/packages/ef/bb/19a5d672f86dd26be0fc4f3a4c04264c088f3309b7b9d4e3e853a1f3cfda/blosc2-2.7.1.tar.gz
 Summary  : Python wrapper for the C-Blosc2 library
 Group    : Development/Tools
 License  : BSD-2-Clause BSD-3-Clause MIT Zlib
-Requires: pypi-blosc2-lib = %{version}-%{release}
 Requires: pypi-blosc2-license = %{version}-%{release}
 Requires: pypi-blosc2-python = %{version}-%{release}
 Requires: pypi-blosc2-python3 = %{version}-%{release}
 BuildRequires : buildreq-distutils3
+BuildRequires : c-blosc2-dev
 BuildRequires : cmake
 BuildRequires : ninja
 BuildRequires : pypi(cython)
@@ -36,26 +36,6 @@ Python-Blosc2
 =============
 A Python wrapper for the extremely fast Blosc2 compression library
 ==================================================================
-
-%package dev
-Summary: dev components for the pypi-blosc2 package.
-Group: Development
-Requires: pypi-blosc2-lib = %{version}-%{release}
-Provides: pypi-blosc2-devel = %{version}-%{release}
-Requires: pypi-blosc2 = %{version}-%{release}
-
-%description dev
-dev components for the pypi-blosc2 package.
-
-
-%package lib
-Summary: lib components for the pypi-blosc2 package.
-Group: Libraries
-Requires: pypi-blosc2-license = %{version}-%{release}
-
-%description lib
-lib components for the pypi-blosc2 package.
-
 
 %package license
 Summary: license components for the pypi-blosc2 package.
@@ -89,25 +69,19 @@ Requires: pypi(py_cpuinfo)
 python3 components for the pypi-blosc2 package.
 
 
-%package staticdev
-Summary: staticdev components for the pypi-blosc2 package.
-Group: Default
-Requires: pypi-blosc2-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the pypi-blosc2 package.
-
-
 %prep
 %setup -q -n blosc2-2.7.1
 cd %{_builddir}/blosc2-2.7.1
 
 %build
+## build_prepend content
+export CMAKE_ARGS="-DUSE_SYSTEM_BLOSC2=ON"
+## build_prepend end
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1729300642
+export SOURCE_DATE_EPOCH=1729491896
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -159,35 +133,6 @@ echo ----[ mark ]----
 %files
 %defattr(-,root,root,-)
 
-%files dev
-%defattr(-,root,root,-)
-/usr/include/b2nd.h
-/usr/include/blosc2.h
-/usr/include/blosc2/blosc2-common.h
-/usr/include/blosc2/blosc2-export.h
-/usr/include/blosc2/blosc2-stdio.h
-/usr/include/blosc2/codecs-registry.h
-/usr/include/blosc2/filters-registry.h
-/usr/include/blosc2/tuners-registry.h
-/usr/lib64/cmake/Blosc2/Blosc2Config.cmake
-/usr/lib64/cmake/Blosc2/Blosc2ConfigVersion.cmake
-/usr/lib64/cmake/Blosc2/Blosc2Targets-release.cmake
-/usr/lib64/cmake/Blosc2/Blosc2Targets.cmake
-/usr/lib64/cmake/Blosc2/Modules/FindIPP.cmake
-/usr/lib64/cmake/Blosc2/Modules/FindLZ4.cmake
-/usr/lib64/cmake/Blosc2/Modules/FindSIMD.cmake
-/usr/lib64/cmake/Blosc2/Modules/FindZLIB_NG.cmake
-/usr/lib64/cmake/Blosc2/Modules/FindZSTD.cmake
-/usr/lib64/cmake/Blosc2/Modules/toolchain-aarch64.cmake
-/usr/lib64/cmake/Blosc2/Modules/toolchain-armhf.cmake
-/usr/lib64/cmake/Blosc2/Modules/toolchain-armsf.cmake
-/usr/lib64/libblosc2.so
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/libblosc2.so.2.15.2
-/usr/lib64/libblosc2.so.4
-
 %files license
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/pypi-blosc2/1e0b08e7a2124c67c42261ac819e2340a2dd912c
@@ -204,7 +149,3 @@ echo ----[ mark ]----
 %files python3
 %defattr(-,root,root,-)
 /usr/lib/python3*/*
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/libblosc2.a
