@@ -7,7 +7,7 @@
 #
 Name     : pypi-blosc2
 Version  : 2.7.1
-Release  : 2
+Release  : 3
 URL      : https://files.pythonhosted.org/packages/ef/bb/19a5d672f86dd26be0fc4f3a4c04264c088f3309b7b9d4e3e853a1f3cfda/blosc2-2.7.1.tar.gz
 Source0  : https://files.pythonhosted.org/packages/ef/bb/19a5d672f86dd26be0fc4f3a4c04264c088f3309b7b9d4e3e853a1f3cfda/blosc2-2.7.1.tar.gz
 Summary  : Python wrapper for the C-Blosc2 library
